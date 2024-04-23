@@ -1,0 +1,6 @@
+Name: Azamat
+Number: 12345
+Name: Tamaza
+Number: 54321
+Name: Mazata
+Number: 34543
