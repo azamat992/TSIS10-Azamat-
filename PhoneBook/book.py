@@ -1,7 +1,6 @@
 import psycopg2
 import csv
 
-# Connect to PostgreSQL database
 conn = psycopg2.connect(
     host="localhost",
     database="postgres",
@@ -11,13 +10,11 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
-# Function to input data from console
 def inputData():
     name = input("Please enter the person's name: ")
     number = input("Please enter the phone number: ")
     cur.execute('INSERT INTO postgres.public.phone_book("PersonName", "PhoneNumber") VALUES(%s, %s);', (name, number))
 
-# Function to import data from CSV
 def importFromCSV():
     filepath = r'C:\Users\ADMIN\OneDrive\Рабочий стол\azamat\lab10\fil.csv'
     with open(filepath, 'r') as file:
@@ -26,11 +23,9 @@ def importFromCSV():
             personName, phoneNumber = row
             cur.execute('INSERT INTO postgres.public.phone_book("PersonName", "PhoneNumber") VALUES(%s, %s);', (personName, phoneNumber))
 
-# Function to update an existing contact
 def update_contact(personName, phoneNumber):
     cur.execute('UPDATE postgres.public.phone_book SET "PhoneNumber" = %s WHERE "PersonName" = %s;', (phoneNumber, personName))
 
-# Function to query data from the table and save to a file
 def queryData():
     cur.execute('SELECT * FROM postgres.public.phone_book')
     data = cur.fetchall()
@@ -39,16 +34,13 @@ def queryData():
         for row in data:
             f.write("Name: " + str(row[0]) + "\n" + "Number: " + str(row[1]) + "\n")
 
-# Function to delete a contact by name
 def deleteData():
     personName = input("Please enter the name of the contact you want to delete: ")
     cur.execute(f'DELETE FROM postgres.public.phone_book WHERE "PersonName" = \'{personName}\';')
 
-# Function to delete all data from the table
 def deleteAllData():
     cur.execute('DELETE FROM postgres.public.phone_book;')
 
-# Main loop for user interaction
 done = False
 while not done:
     print("""
@@ -84,6 +76,5 @@ while not done:
     except ValueError:
         print("Please enter a valid number (1-7).")
 
-# Close the cursor and connection
 cur.close()
 conn.close()
